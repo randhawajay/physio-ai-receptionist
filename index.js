@@ -1,62 +1,10 @@
-import express from "express";
-import OpenAI from "openai";
+app.post("/call", (req, res) => {
+  console.log("TWILIO HIT /call");
 
-const app = express();
-app.use(express.urlencoded({ extended: true }));
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-app.get("/", (req, res) => {
-  res.send("AI Receptionist Running");
-});
-
-app.post("/call", async (req, res) => {
   res.type("text/xml");
-
-  try {
-    const userInput = req.body.SpeechResult || "Hello";
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: `You are a professional physiotherapy clinic receptionist.
-You speak calmly, clearly, and naturally.
-You help collect patient info and appointment requests.
-Never give medical advice.
-Ask one clear follow-up question at a time.`
-        },
-        {
-          role: "user",
-          content: userInput
-        }
-      ]
-    });
-
-    const reply = completion.choices[0].message.content;
-
-    res.send(`
+  res.send(`
 <Response>
-  <Gather input="speech" timeout="5" speechTimeout="auto" action="/call" method="POST">
-    <Say>${reply}</Say>
-  </Gather>
+  <Say>Hello. Twilio is connected to Render successfully.</Say>
 </Response>
 `);
-
-  } catch (error) {
-    console.log("ERROR:", error);
-
-    res.send(`
-<Response>
-  <Say>Sorry, the system is currently unavailable. Please try again later.</Say>
-</Response>
-`);
-  }
-});
-
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Server running");
 });
