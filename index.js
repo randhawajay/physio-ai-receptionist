@@ -89,7 +89,7 @@ app.post("/call", async (req, res) => {
 
   const twiml = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Gather input="speech" timeout="2" speechTimeout="auto" action="/call" method="POST">
+  <Gather input="speech" timeout="3" speechTimeout="auto" action="/call" method="POST">
     <Say>${safeReply}</Say>
   </Gather>
 </Response>`;
